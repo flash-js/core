@@ -1,3 +1,5 @@
+import { SignalExecutionContext } from "./SignalExecutionContext"
+
 let trackers = []
 
 let SIGNAL_EXECUTION_CONTEXT = null
@@ -23,46 +25,15 @@ const execute = (context, params = []) => {
   // Set execution context
   SIGNAL_EXECUTION_CONTEXT = context
   // Compute new state
-  context.value = context.compute(...params)
+  context.state.value = context.compute(...params)
   // Reset execution context to cache
   SIGNAL_EXECUTION_CONTEXT = previousExecutingSignal 
   // Invoke all target signals
-  context.targets.forEach(target => execute(target, [target.value]))
+  context.targets.forEach(target => execute(target, [target.state.value]))
 }
 
 export const on = (init) => {
-  const context = {
-    sources: [],
-    targets: [],
-    compute: typeof init === 'function' ? init : undefined,
-    // An absent value entry determines whether a value is set because undefined
-    // is a valid value.
-    ...(typeof init === 'function' ? {} : { value: init }),
-    addSource(source) {
-      if (!this.sources.includes(source)) {
-        this.sources.push(source)
-      }
-      return signal
-    },
-    removeSource(source) {
-      const index = this.sources.indexOf(source)
-      if (index !== -1) { 
-        this.sources.splice(index, 1)
-      }
-    },
-    addTarget(target) {
-      if (!this.targets.includes(target)) {
-        this.targets.push(target)
-      }
-      return signal
-    },
-    removeTarget(target) {
-      const index = this.targets.indexOf(target)
-      if (index !== -1) { 
-        this.targets.splice(index, 1)
-      }
-    }
-  }
+  const context = new SignalExecutionContext(init)
 
   const signal = (...params) => {
     // Get signal state
@@ -71,17 +42,17 @@ export const on = (init) => {
         context.addTarget(SIGNAL_EXECUTION_CONTEXT)
         SIGNAL_EXECUTION_CONTEXT.addSource(context)
       }
-      if (!('value' in context) && context.compute != null) {
+      if (!('value' in context.state) && context.compute != null) {
         execute(context, params)
       }
-      return context.value
+      return context.state.value
     }
     // Root signal
     if (context.compute == null) {
       for (const param of params) {
-        context.value = param
+        context.state.value = param
         // Invoke all target signals
-        context.targets.forEach(target => execute(target, [target.value]))
+        context.targets.forEach(target => execute(target, [target.state.value]))
       }
     }
     // Computed signal
@@ -93,7 +64,7 @@ export const on = (init) => {
   }
 
   signal.peak = () => {
-    return context.value
+    return context.state.value
   }
 
   return signal
