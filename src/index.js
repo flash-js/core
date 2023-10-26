@@ -2,112 +2,99 @@ let trackers = []
 
 let SIGNAL_EXECUTION_CONTEXT = null
 
-export const on = (init) => {
-  const state = typeof init === 'function' ? { compute: init } : { value: init }
-  // TODO: Move all source/target data to the execution context along with the
-  // methods to add/remove. Include the value and compute method in the context
-  // as well. We can then insert the signal's execution context into the global
-  // constant (SIGNAL_EXECUTION_CONTEXT) instead of the signal itself.
-  // During computation of each signal, we'll have all the methods necessary
-  // to install the context into a context dependency graph. This way the signal
-  // remains as a public interface, while the internal execution context remains
-  // private and separate from the signal's public API. The context will be a
-  // internal interface which the signal's methods have privileged access to.
-  // Debugging info can be tracked within the context graph, and other APIs can
-  // expose this debugging information (including error stack traces).
-  const executionContext = {
-    sourceSignals: [],
-    targetSignals: [],
-  }
-  const sourceSignals = []
-  const targetSignals = []
+/**
+ * Evaluates the signal's value based on it's compute function.
+ * 
+ * It removes itself from it's current signal graph (targets/sources) before 
+ * computing, and sets the SIGNAL_EXECUTION_CONTEXT to the current signal 
+ * in order to re-instate it into the a signal graph during compute. 
+ * 
+ * @param {SignalExecutionContext} context – A signal context to execute
+ * @param  {any[]} params – Parameters to pass to the signal's compute
+ */
+const execute = (context, params = []) => {
+  // Unsubscribe from existing upstream signals
+  context.sources.forEach(sourceContext => {
+    context.removeSource(sourceContext)
+    sourceContext.removeTarget(context)
+  })
+  // Cache execution context
+  const previousExecutingSignal = SIGNAL_EXECUTION_CONTEXT
+  // Set execution context
+  SIGNAL_EXECUTION_CONTEXT = context
+  // Compute new state
+  context.value = context.compute(...params)
+  // Reset execution context to cache
+  SIGNAL_EXECUTION_CONTEXT = previousExecutingSignal 
+  // Invoke all target signals
+  context.targets.forEach(target => execute(target, [target.value]))
+}
 
-  /**
-   * Evaluates the signal's value based on it's compute function.
-   * 
-   * It removes itself from it's current signal graph (targets/sources) before 
-   * computing, and sets the SIGNAL_EXECUTION_CONTEXT to the current signal 
-   * in order to re-instate it into the a signal graph during compute. 
-   * 
-   * @param  {any[]} params parameters to pass to the signal's compute
-   */
-  const execute = (params = []) => {
-    // Unsubscribe from existing upstream signals
-    sourceSignals.forEach(source => {
-      signal.removeSource(source)
-      source.removeTarget(signal)
-    })
-    // Cache execution context
-    const previousExecutingSignal = SIGNAL_EXECUTION_CONTEXT
-    // Set execution context
-    SIGNAL_EXECUTION_CONTEXT = signal
-    // Compute new state
-    state.value = state.compute(...params)
-    // Reset execution context to cache
-    SIGNAL_EXECUTION_CONTEXT = previousExecutingSignal 
-    // Invoke all target signals
-    targetSignals.forEach(target => target(target.peak()))
+export const on = (init) => {
+  const context = {
+    sources: [],
+    targets: [],
+    compute: typeof init === 'function' ? init : undefined,
+    // An absent value entry determines whether a value is set because undefined
+    // is a valid value.
+    ...(typeof init === 'function' ? {} : { value: init }),
+    addSource(source) {
+      if (!this.sources.includes(source)) {
+        this.sources.push(source)
+      }
+      return signal
+    },
+    removeSource(source) {
+      const index = this.sources.indexOf(source)
+      if (index !== -1) { 
+        this.sources.splice(index, 1)
+      }
+    },
+    addTarget(target) {
+      if (!this.targets.includes(target)) {
+        this.targets.push(target)
+      }
+      return signal
+    },
+    removeTarget(target) {
+      const index = this.targets.indexOf(target)
+      if (index !== -1) { 
+        this.targets.splice(index, 1)
+      }
+    }
   }
 
   const signal = (...params) => {
     // Get signal state
     if (params.length === 0) {
       if (SIGNAL_EXECUTION_CONTEXT != null) {
-        signal.addTarget(SIGNAL_EXECUTION_CONTEXT)
-        SIGNAL_EXECUTION_CONTEXT.addSource(signal)
+        context.addTarget(SIGNAL_EXECUTION_CONTEXT)
+        SIGNAL_EXECUTION_CONTEXT.addSource(context)
       }
-      if (!('value' in state) && state.compute != null) {
-        execute(params)
+      if (!('value' in context) && context.compute != null) {
+        execute(context, params)
       }
-      return state.value
+      return context.value
     }
     // Root signal
-    if (state.compute == null) {
+    if (context.compute == null) {
       for (const param of params) {
-        state.value = param
+        context.value = param
         // Invoke all target signals
-        targetSignals.forEach(target => target(target.peak()))
+        context.targets.forEach(target => execute(target, [target.value]))
       }
     }
     // Computed signal
     else {
-      execute(params)
+      execute(context, params)
     }
     // Always return signal
     return signal
   }
 
-  signal.addSource = (source) => {
-    if (!sourceSignals.includes(source)) {
-      sourceSignals.push(source)
-    }
-    return signal
-  }
-  signal.removeSource = (source) => {
-    const index = sourceSignals.indexOf(source)
-    if (index !== -1) { 
-      sourceSignals.splice(index, 1)
-    }
-  }
-
-  signal.addTarget = (target) => {
-    if (!targetSignals.includes(target)) {
-      targetSignals.push(target)
-    }
-    return signal
-  }
-
-  signal.removeTarget = (target) => {
-    const index = targetSignals.indexOf(target)
-    if (index !== -1) { 
-      targetSignals.splice(index, 1)
-    }
-  }
-
   signal.peak = () => {
-    return state.value
+    return context.value
   }
-
 
   return signal
 }
