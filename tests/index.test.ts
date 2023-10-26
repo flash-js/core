@@ -43,7 +43,6 @@ describe('A computed signal', () => {
   test("should compute from signal upstream", () => {
     const num = on(2)
     const square = on(() => num() ** 2)
-    square()
     expect(square()).toBe(4)
   })
 
@@ -52,7 +51,6 @@ describe('A computed signal', () => {
     const left = on('LEFT')
     const right = on('RIGHT')
     const signal = on(() => lever() ? left() : right())
-    signal()
     
     expect(signal()).toBe('LEFT')
 
@@ -73,7 +71,6 @@ describe('A computed signal', () => {
   test("should react to signal upstream", () => {
     const num = on(0)
     const square = on(() => num() ** 2)
-    square()
     num(2)
     expect(square()).toBe(4)
   })
@@ -95,12 +92,10 @@ describe('A computed signal', () => {
   test("should react to signals upstream", () => {
     const name = on()
     const message = on(() => `Hello, ${name()}`)
-    message()
-    on(() => {
-      expect(message()).toBe(`Hello, ${name()}`)
-    })()
 
     name('Bob')
+    expect(message()).toBe(`Hello, Bob`)
     name('World')
+    expect(message()).toBe(`Hello, World`)
   })
 })
