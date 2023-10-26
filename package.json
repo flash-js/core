@@ -1,0 +1,35 @@
+{
+  "name": "flash",
+  "type": "module",
+  "main": "./lib/cjs/index.js",
+  "module": "./lib/index.js",
+  "types": "./src/index.d.ts",
+  "files": [
+    "/CHANGELOG.md",
+    "/lib/*",
+    "/package.json",
+    "/README.md",
+    "/src/*"
+  ],
+  "scripts": {
+    "clean": "rimraf build",
+    "build": "bun run clean && bun run build.lib && bun run build.types",
+    "build.lib": "rollup -c",
+    "build.types": "tsc --emitDeclarationOnly --project tsconfig.json"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.23.2",
+    "@babel/preset-env": "^7.23.2",
+    "@rollup/plugin-babel": "^6.0.4",
+    "bun-types": "latest",
+    "rimraf": "^5.0.5",
+    "rollup": "^4.1.4",
+    "rollup-plugin-filesize": "^10.0.0",
+    "tsc": "^2.0.4",
+    "typescript": "^5.2.2"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {}
+}
