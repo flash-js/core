@@ -1,6 +1,8 @@
 {
   "name": "@flash.js/core",
   "version": "0.0.1",
+  "description": "Flash is a JavaScript signals library for state management.",
+  "author": "Samuel Holmes",
   "type": "module",
   "main": "./lib/cjs/index.js",
   "module": "./lib/index.js",
