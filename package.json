@@ -1,5 +1,6 @@
 {
-  "name": "flash",
+  "name": "@flash.js/core",
+  "version": "0.0.1",
   "type": "module",
   "main": "./lib/cjs/index.js",
   "module": "./lib/index.js",
