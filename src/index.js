@@ -1,8 +1,8 @@
-import { SignalExecutionContext } from "./SignalExecutionContext"
+import { SignalContext } from "./SignalContext"
 
 let trackers = []
 
-let SIGNAL_EXECUTION_CONTEXT = null
+let CURRENT_SIGNAL_CONTEXT = null
 
 /**
  * Computes a signal context's value using it's compute function and caches 
@@ -12,7 +12,7 @@ let SIGNAL_EXECUTION_CONTEXT = null
  * computing, and sets the SIGNAL_EXECUTION_CONTEXT to the current signal 
  * in order to re-instate it into the a signal graph during compute. 
  * 
- * @param {SignalExecutionContext} context – A signal context to execute
+ * @param {SignalContext} context – A signal context to execute
  * @param  {any[]} params – Parameters to pass to the signal's compute
  */
 const executeSignalContext = (context, params = []) => {
@@ -21,27 +21,27 @@ const executeSignalContext = (context, params = []) => {
     context.removeSource(sourceContext)
     sourceContext.removeTarget(context)
   })
-  // Cache execution context
-  const previousExecutingSignal = SIGNAL_EXECUTION_CONTEXT
-  // Set execution context
-  SIGNAL_EXECUTION_CONTEXT = context
+  // Cache signal current context
+  const previousSignalContext = CURRENT_SIGNAL_CONTEXT
+  // Set signal context
+  CURRENT_SIGNAL_CONTEXT = context
   // Compute new state
   context.state.value = context.compute(...params)
-  // Reset execution context to cache
-  SIGNAL_EXECUTION_CONTEXT = previousExecutingSignal 
+  // Reset signal context to cache
+  CURRENT_SIGNAL_CONTEXT = previousSignalContext 
   // Invoke all target signals
   context.targets.forEach(target => executeSignalContext(target, [target.state.value]))
 }
 
-const registerSourceToExecutionContext = (context) => {
-  if (SIGNAL_EXECUTION_CONTEXT != null) {
-    context.addTarget(SIGNAL_EXECUTION_CONTEXT)
-    SIGNAL_EXECUTION_CONTEXT.addSource(context)
+const registerSourceToCurrentSignalContext = (context) => {
+  if (CURRENT_SIGNAL_CONTEXT != null) {
+    context.addTarget(CURRENT_SIGNAL_CONTEXT)
+    CURRENT_SIGNAL_CONTEXT.addSource(context)
   }
 }
 
 export const on = (init) => {
-  const context = new SignalExecutionContext(init)
+  const context = new SignalContext(init)
 
   const signal = (...params) => {
     // Get signal state
@@ -51,7 +51,7 @@ export const on = (init) => {
         executeSignalContext(context, params)
       }
       // Register context as a source to the current execution context
-      registerSourceToExecutionContext(context)
+      registerSourceToCurrentSignalContext(context)
       // Return signal value
       return context.state.value
     }

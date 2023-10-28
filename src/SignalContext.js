@@ -1,4 +1,4 @@
-export class SignalExecutionContext {
+export class SignalContext {
   sources = []
   targets = []
   compute = undefined
