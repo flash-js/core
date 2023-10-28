@@ -30,6 +30,10 @@ const executeSignalContext = (context, params = []) => {
   // Reset signal context to cache
   CURRENT_SIGNAL_CONTEXT = previousSignalContext 
   // Invoke all target signals
+  executeSignalContextTargets(context)
+}
+
+const executeSignalContextTargets = (context) => {
   context.targets.forEach(target => executeSignalContext(target, [target.state.value]))
 }
 
@@ -60,7 +64,7 @@ export const on = (init) => {
       for (const param of params) {
         context.state.value = param
         // Invoke all target signals
-        context.targets.forEach(target => executeSignalContext(target, [target.state.value]))
+        executeSignalContextTargets(context)
       }
     }
     // Computed signal
