@@ -32,19 +32,26 @@ const execute = (context, params = []) => {
   context.targets.forEach(target => execute(target, [target.state.value]))
 }
 
+const registerSourceToExecutionContext = (context) => {
+  if (SIGNAL_EXECUTION_CONTEXT != null) {
+    context.addTarget(SIGNAL_EXECUTION_CONTEXT)
+    SIGNAL_EXECUTION_CONTEXT.addSource(context)
+  }
+}
+
 export const on = (init) => {
   const context = new SignalExecutionContext(init)
 
   const signal = (...params) => {
     // Get signal state
     if (params.length === 0) {
-      if (SIGNAL_EXECUTION_CONTEXT != null) {
-        context.addTarget(SIGNAL_EXECUTION_CONTEXT)
-        SIGNAL_EXECUTION_CONTEXT.addSource(context)
-      }
+      // Initialize computed signal
       if (!('value' in context.state) && context.compute != null) {
         execute(context, params)
       }
+      // Register context as a source to the current execution context
+      registerSourceToExecutionContext(context)
+      // Return signal value
       return context.state.value
     }
     // Root signal
