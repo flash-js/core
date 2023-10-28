@@ -45,7 +45,9 @@ describe('A computed signal', () => {
     const square = on(() => num() ** 2)
     expect(square()).toBe(4)
   })
+})
 
+describe('Reactive signals', () => {
   test("should recompute from new signal upstream", () => {
     const lever = on(true)
     const left = on('LEFT')
