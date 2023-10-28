@@ -1,8 +1,11 @@
 export class SignalContext {
-  sources = []
-  targets = []
   compute = undefined
   state = {}
+
+  sourceRefs = []
+  sourceIndices = new WeakMap()
+  targetRefs = []
+  targetIndices = new WeakMap()
 
   constructor(init) {
     if (typeof init === 'function') {
@@ -16,28 +19,34 @@ export class SignalContext {
   }
 
   addSource(source) {
-    if (!this.sources.includes(source)) {
-      this.sources.push(source)
+    if (this.sourceIndices.get(source) == null) {
+      this.sourceIndices.set(source, this.sourceRefs.length)
+      const ref = new WeakRef(source)
+      this.sourceRefs.push(ref)
     }
   }
 
   removeSource(source) {
-    const index = this.sources.indexOf(source)
+    const index = this.sourceIndices.get(source)
     if (index !== -1) { 
-      this.sources.splice(index, 1)
+      this.sourceRefs.splice(index, 1)
+      this.sourceIndices.delete(source)
     }
   }
 
   addTarget(target) {
-    if (!this.targets.includes(target)) {
-      this.targets.push(target)
+    if (this.targetIndices.get(target) == null) {
+      this.targetIndices.set(target, this.targetRefs.length)
+      const ref = new WeakRef(target)
+      this.targetRefs.push(ref)
     }
   }
 
   removeTarget(target) {
-    const index = this.targets.indexOf(target)
+    const index = this.targetIndices.get(target)
     if (index !== -1) { 
-      this.targets.splice(index, 1)
+      this.targetRefs.splice(index, 1)
+      this.targetIndices.delete(target)
     }
   }
 }

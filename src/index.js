@@ -17,9 +17,10 @@ let CURRENT_SIGNAL_CONTEXT = null
  */
 const executeSignalContext = (context, params = []) => {
   // Unsubscribe from existing upstream signals
-  context.sources.forEach(sourceContext => {
-    context.removeSource(sourceContext)
-    sourceContext.removeTarget(context)
+  context.sourceRefs.forEach(sourceRef => {
+    const source = sourceRef.deref()
+    context.removeSource(source)
+    source.removeTarget(context)
   })
   // Cache signal current context
   const previousSignalContext = CURRENT_SIGNAL_CONTEXT
@@ -34,7 +35,15 @@ const executeSignalContext = (context, params = []) => {
 }
 
 const executeSignalContextTargets = (context) => {
-  context.targets.forEach(target => executeSignalContext(target, [target.state.value]))
+  for (let i = 0; i < context.targetRefs.length; ++i) {
+    const ref = context.targetRefs[i]
+    const target = ref.deref()
+    if (target == null) {
+      context.targetRefs.splice(i--, 1)
+      continue
+    }
+    executeSignalContext(target, [target.state.value])
+  }
 }
 
 const registerSourceToCurrentSignalContext = (context) => {
