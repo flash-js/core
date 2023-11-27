@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { on } from "../src";
+import { on, self } from "../src";
 
 describe('A root signal', () => {
   test("should have a value", () => {
@@ -77,20 +77,6 @@ describe('Reactive signals', () => {
     expect(square()).toBe(4)
   })
 
-  test("should react to signal upstream with previous value", () => {
-    const num = on(0)
-    const sum = on((prev: number) => prev + num())
-    sum(0)
-    expect(sum()).toBe(0)
-    num(1)
-    expect(sum()).toBe(1)
-    num(2)
-    expect(sum()).toBe(3)
-    num(5)
-    expect(sum()).toBe(8)
-  })
-
-
   test("should react to signals upstream", () => {
     const name = on<string>()
     const message = on(() => `Hello, ${name()}`)
@@ -99,6 +85,20 @@ describe('Reactive signals', () => {
     expect(message()).toBe(`Hello, Bob`)
     name('World')
     expect(message()).toBe(`Hello, World`)
+  })
+})
+
+describe('Reducers', () => {
+  test("should react to signal upstream with previous value", () => {
+    const num = on(0)
+    const sum = on(() => self(0) + num())
+    expect(sum()).toBe(0)
+    num(1)
+    expect(sum()).toBe(1)
+    num(2)
+    expect(sum()).toBe(3)
+    num(5)
+    expect(sum()).toBe(8)
   })
 })
 

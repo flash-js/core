@@ -90,3 +90,7 @@ export const on = (init) => {
 
   return signal
 }
+
+export const self = (initialValue) => {
+  return CURRENT_SIGNAL_CONTEXT.state.value ?? initialValue
+}
