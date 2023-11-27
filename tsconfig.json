@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
+    "types": ["bun-types"],
     "lib": ["es2015"],
-    "rootDir": "./src",  
     "declaration": true, 
     "declarationDir": "./lib",
     "strict": true
   },
   "include": [
-    "src/**/*"
+    "tests/**/*"
   ],
 }
