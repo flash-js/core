@@ -1,8 +1,13 @@
-export type SignalInitializer<T, Args extends any[] = any[] > = T | ((...args: [...Args]) => T)
+export type SignalComputation<T, Args extends any[]> = (...args: [...Args]) => T
 
-export interface Signal<T>{
+export interface StaticSignal<T>{
    (): T 
-   (...args: any[]): Signal<T>
+   (...value: T[]): StaticSignal<T> 
+}
+export interface ComputedSignal<T, Args extends any[] = any[] >{
+   (): T 
+   (...args: [...Args]): ComputedSignal<T>
 }
 
-export declare function on<T>(init: SignalInitializer<T>): Signal<T>
+export declare function on<T, Args extends any[] = any[] >(compute: SignalComputation<T, Args>): ComputedSignal<T, Args>
+export declare function on<T>(initialValue?: T): StaticSignal<T>;

@@ -22,20 +22,20 @@ describe('A root signal', () => {
 
 describe('A computed signal', () => {
   test("should compute its value", () => {
-    const square = on((value) => value**2)
+    const square = on((value: number) => value**2)
     square(2)
     expect(square()).toBe(4)
   })
   
   test("should compute its value over many params", () => {
-    const sum = on((...values) => values.reduce((sum, value) => sum + value, 0))
+    const sum = on((...values: number[]) => values.reduce((sum, value) => sum + value, 0))
     sum(1, 2, 3)
     expect(sum()).toBe(6)
   })
 
   test("should compute from signal with initial values", () => {
     const num = on(1)
-    const square = on((a, b) => a + b + num())
+    const square = on((a: number, b: number) => a + b + num())
     square(100, 10)
     expect(square()).toBe(111)
   })
@@ -79,7 +79,7 @@ describe('Reactive signals', () => {
 
   test("should react to signal upstream with previous value", () => {
     const num = on(0)
-    const sum = on((prev) => prev + num())
+    const sum = on((prev: number) => prev + num())
     sum(0)
     expect(sum()).toBe(0)
     num(1)
@@ -92,7 +92,7 @@ describe('Reactive signals', () => {
 
 
   test("should react to signals upstream", () => {
-    const name = on('')
+    const name = on<string>()
     const message = on(() => `Hello, ${name()}`)
 
     name('Bob')
