@@ -92,7 +92,7 @@ describe('Reactive signals', () => {
 
 
   test("should react to signals upstream", () => {
-    const name = on()
+    const name = on('')
     const message = on(() => `Hello, ${name()}`)
 
     name('Bob')

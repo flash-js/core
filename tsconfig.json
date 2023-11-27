@@ -2,11 +2,8 @@
   "compilerOptions": {
     "types": ["bun-types"],
     "lib": ["es2015"],
-    "declaration": true, 
-    "declarationDir": "./lib",
+    "noEmit": true,
     "strict": true
   },
-  "include": [
-    "tests/**/*"
-  ],
+  "exclude": ["node_modules", "lib"],
 }
