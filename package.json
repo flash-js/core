@@ -24,7 +24,7 @@
     "@babel/core": "^7.23.2",
     "@babel/preset-env": "^7.23.2",
     "@rollup/plugin-babel": "^6.0.4",
-    "bun-types": "latest",
+    "bun-types": "^1.0.14",
     "rimraf": "^5.0.5",
     "rollup": "^4.1.4",
     "rollup-plugin-filesize": "^10.0.0",
