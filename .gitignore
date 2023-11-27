@@ -13,3 +13,5 @@ lerna-debug.log*
 # Build output
 build
 lib
+
+.DS_Store
