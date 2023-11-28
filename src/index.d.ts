@@ -1,10 +1,12 @@
 export interface StaticSignal<T>{
    (): T 
    (...value: T[]): StaticSignal<T> 
+   off(): void
 }
 export interface ComputedSignal<T, Args extends any[] = any[] >{
    (): T 
    (...args: [...Args]): ComputedSignal<T>
+   off(): void
 }
 
 export type ComputeFn<T, Args extends any[]> = (...args: [...Args]) => T

@@ -35,4 +35,20 @@ describe('Effects', () => {
 
     expect(log).toEqual([0, 1, 4, 9])
   })
+
+  test("should be able to be turned off", () => {
+    let externalState = 0
+    const event = on(0)
+    const effect = on(() => {
+      externalState = event()
+    })
+    effect()
+
+    expect(externalState).toBe(0)
+    event(1)
+    expect(externalState).toBe(1)
+    effect.off()
+    event(2)
+    expect(externalState).toBe(1)
+  })
 })
