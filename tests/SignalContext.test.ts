@@ -9,7 +9,7 @@ describe('SignalContext', () => {
     expect(context.compute).toBe(undefined)
   })
 
-  test('dynamic contexts have computed state', () => {
+  test('computed contexts have computed state', () => {
     const context = new SignalContext(() => 2)
     expect(context.state).toEqual({})
     expect(context.compute()).toBe(2)
