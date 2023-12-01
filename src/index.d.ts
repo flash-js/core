@@ -1,3 +1,5 @@
+export * from './SignalContext'
+
 export interface StaticSignal<T>{
    (): T 
    (...value: T[]): StaticSignal<T> 
