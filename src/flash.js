@@ -78,6 +78,9 @@ const executeSignalContext = (context, params = []) => {
 }
 
 const executeSignalContextTargets = (context) => {
+  // Allocate all targets into a duplicate array because targetRefs will be
+  // mutated in place during execution:
+  const targets = []
   for (let i = 0; i < context.targetRefs.length; ++i) {
     const ref = context.targetRefs[i]
     const target = ref.deref()
@@ -85,6 +88,11 @@ const executeSignalContextTargets = (context) => {
       context.targetRefs.splice(i--, 1)
       continue
     }
+    targets.push(target)
+  }
+
+  // Execute all targets:
+  for (const target of targets) {
     executeSignalContext(target, [target.state.value])
   }
 }
