@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { on } from "../src/flash";
 
-describe('A root signal', () => {
+describe('Static Signals', () => {
   test("should have a value", () => {
     const signal = on(1)
     expect(signal()).toBe(1)

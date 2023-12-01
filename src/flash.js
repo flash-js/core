@@ -17,7 +17,7 @@ export const on = (init) => {
       // Return signal value
       return context.state.value
     }
-    // Root signal
+    // Static signal
     if (context.compute == null) {
       for (const param of params) {
         context.state.value = param

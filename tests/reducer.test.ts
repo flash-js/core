@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { on, self } from "../src/flash";
 
-describe('Reducers', () => {
+describe('Reducers Signals', () => {
   test("should react to signal upstream with previous value", () => {
     const num = on(0)
     const sum = on(() => self(0) + num())

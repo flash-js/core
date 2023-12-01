@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { on } from "../src/flash";
 
-describe('A computed signal', () => {
+describe('Computed Signals', () => {
   test("should compute its value", () => {
     const square = on((value: number) => value**2)
     square(2)
