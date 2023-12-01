@@ -18,7 +18,7 @@
     "clean": "rimraf build",
     "build": "bun run clean && bun run build.lib && bun run build.types",
     "build.lib": "rollup -c",
-    "build.types": "tsc --emitDeclarationOnly --project tsconfig.json"
+    "build.types": "tsc"
   },
   "devDependencies": {
     "@babel/core": "^7.23.2",
@@ -29,7 +29,7 @@
     "rollup": "^4.1.4",
     "rollup-plugin-filesize": "^10.0.0",
     "tsc": "^2.0.4",
-    "typescript": "^5.2.2"
+    "typescript": "^5.3.2"
   },
   "dependencies": {}
 }
