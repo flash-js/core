@@ -4,9 +4,9 @@
   "description": "Flash is a JavaScript signals library for state management.",
   "author": "Samuel Holmes",
   "type": "module",
-  "main": "./lib/cjs/index.js",
-  "module": "./lib/index.js",
-  "types": "./src/index.d.ts",
+  "main": "./lib/cjs/flash.js",
+  "module": "./lib/flash.js",
+  "types": "./src/flash.d.ts",
   "files": [
     "/CHANGELOG.md",
     "/lib/*",

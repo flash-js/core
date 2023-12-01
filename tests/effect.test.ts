@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { on } from "../src";
+import { on } from "../src/flash";
 
 describe('Effects', () => {
   test("should respond to signal changes", () => {

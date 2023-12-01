@@ -11,7 +11,7 @@ const babelOpts = {
 const sizeOpts = { format: { round: 3 } }
 
 export default {
-  input: './src/index.js',
+  input: './src/flash.js',
   output: [
     { file: packageJson.main, format: 'cjs' },
     { file: packageJson.module, format: 'es' }

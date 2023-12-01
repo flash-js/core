@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { on, self } from "../src";
+import { on, self } from "../src/flash";
 
 describe('Reducers', () => {
   test("should react to signal upstream with previous value", () => {

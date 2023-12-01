@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { on } from "../src";
+import { on } from "../src/flash";
 
 describe('A computed signal', () => {
   test("should compute its value", () => {
