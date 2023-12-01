@@ -2,6 +2,53 @@ import { SignalContext } from "./SignalContext"
 
 let CURRENT_SIGNAL_CONTEXT = null
 
+export const on = (init) => {
+  const context = new SignalContext(init)
+
+  const signal = (...params) => {
+    // Get signal state
+    if (params.length === 0) {
+      // Initialize computed signal
+      if (!('value' in context.state) && context.compute != null) {
+        executeSignalContext(context, params)
+      }
+      // Register context as a source to the current execution context
+      registerSourceToCurrentSignalContext(context)
+      // Return signal value
+      return context.state.value
+    }
+    // Root signal
+    if (context.compute == null) {
+      for (const param of params) {
+        context.state.value = param
+        // Invoke all target signals
+        executeSignalContextTargets(context)
+      }
+    }
+    // Computed signal
+    else {
+      executeSignalContext(context, params)
+    }
+    // Always return signal
+    return signal
+  }
+
+  signal.off = () => {
+    unregisterSignalContext(context)
+  }
+
+  signal.peak = () => {
+    return context.state.value
+  }
+
+
+  return signal
+}
+
+export const self = (initialValue) => {
+  return CURRENT_SIGNAL_CONTEXT.state.value ?? initialValue
+}
+
 /**
  * Computes a signal context's value using it's compute function and caches 
  * the value in the context state.
@@ -49,53 +96,6 @@ const registerSourceToCurrentSignalContext = (context) => {
     context.addTarget(CURRENT_SIGNAL_CONTEXT)
     CURRENT_SIGNAL_CONTEXT.addSource(context)
   }
-}
-
-export const on = (init) => {
-  const context = new SignalContext(init)
-
-  const signal = (...params) => {
-    // Get signal state
-    if (params.length === 0) {
-      // Initialize computed signal
-      if (!('value' in context.state) && context.compute != null) {
-        executeSignalContext(context, params)
-      }
-      // Register context as a source to the current execution context
-      registerSourceToCurrentSignalContext(context)
-      // Return signal value
-      return context.state.value
-    }
-    // Root signal
-    if (context.compute == null) {
-      for (const param of params) {
-        context.state.value = param
-        // Invoke all target signals
-        executeSignalContextTargets(context)
-      }
-    }
-    // Computed signal
-    else {
-      executeSignalContext(context, params)
-    }
-    // Always return signal
-    return signal
-  }
-
-  signal.off = () => {
-    unregisterSignalContext(context)
-  }
-
-  signal.peak = () => {
-    return context.state.value
-  }
-
-
-  return signal
-}
-
-export const self = (initialValue) => {
-  return CURRENT_SIGNAL_CONTEXT.state.value ?? initialValue
 }
 
 function unregisterSignalContext(context) {
