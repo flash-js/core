@@ -40,4 +40,16 @@ describe('Reactive signals', () => {
     name('World')
     expect(message()).toBe(`Hello, World`)
   })
+
+  test("should not react when using peak", () => {
+    const source = on(0)
+    const target = on(() => source.peak())
+
+    target()
+
+    expect(target()).toBe(0)
+
+    source(1)
+    expect(target()).toBe(0)
+  })
 })
