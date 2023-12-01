@@ -7,9 +7,8 @@ export declare class SignalContext<Init extends ComputeFn<T, Args> | T, T = Excl
   }
 
   sourceRefs: WeakRef<any>[]
-  sourceIndices: WeakMap<SignalContext<any>, number>
+
   targetRefs: WeakRef<any>[] 
-  targetIndices: WeakMap<SignalContext<any>, number>
 
   constructor(init: Init) 
 
