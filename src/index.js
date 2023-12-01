@@ -1,7 +1,5 @@
 import { SignalContext } from "./SignalContext"
 
-let trackers = []
-
 let CURRENT_SIGNAL_CONTEXT = null
 
 /**
