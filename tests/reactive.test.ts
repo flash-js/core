@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { on } from "../src/flash";
+import { on, self } from "../src/flash";
 
 describe('Reactive signals', () => {
   test("should recompute from new signal upstream", () => {

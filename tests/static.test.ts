@@ -18,4 +18,9 @@ describe('Static Signals', () => {
     signal(2, 3)
     expect(signal()).toBe(3)
   })
+
+  test("update should return value", () => {
+    const signal = on(1)
+    expect(signal(2)).toBe(2)
+  })
 })

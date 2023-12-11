@@ -32,7 +32,7 @@ export const on = (init) => {
       executeSignalContext(context, params)
     }
     // Always return signal
-    return signal
+    return context.state.value
   }
 
   signal.off = () => {

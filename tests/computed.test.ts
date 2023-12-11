@@ -26,4 +26,10 @@ describe('Computed Signals', () => {
     const square = on(() => num() ** 2)
     expect(square()).toBe(4)
   })
+
+  test("update should return value", () => {
+    const square = on((n) => n**2)
+    expect(square(2)).toBe(4)
+    expect(square(4)).toBe(16)
+  })
 })

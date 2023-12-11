@@ -2,13 +2,13 @@ export * from './SignalContext'
 
 export interface StaticSignal<T>{
    (): T 
-   (...value: T[]): StaticSignal<T> 
+   (...value: T[]): T 
    off(): void
    peak(): T
 }
 export interface ComputedSignal<T, Args extends any[] = any[] >{
    (): T 
-   (...args: [...Args]): ComputedSignal<T>
+   (...args: [...Args]): T
    off(): void
    peak(): T
 }

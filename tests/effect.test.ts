@@ -12,7 +12,9 @@ describe('Effects', () => {
     // Activate the effect
     effect()
 
-    count(1)(2)(3)
+    count(1)
+    count(2)
+    count(3)
 
     expect(log).toEqual([0, 1, 2, 3])
   })
@@ -31,7 +33,9 @@ describe('Effects', () => {
     // Activate the effect
     effect()
 
-    count(1)(2)(3)
+    count(1)
+    count(2)
+    count(3)
 
     expect(log).toEqual([0, 1, 4, 9])
   })
