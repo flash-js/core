@@ -16,6 +16,20 @@ export class SignalContext {
     }
   }
 
+  sourceFor(target) {
+    this.addTarget(target)
+    target.addSource(this)
+  }
+
+  disconnect() {
+    for (const sourceRef of this.sourceRefs) {
+      const source = sourceRef.deref()
+      if (source == null) continue
+      source.removeTarget(this)
+    }
+    this.targetRefs.splice(0, this.targetRefs.length)
+  }
+
   addSource(source) {
     for (const ref of this.sourceRefs) {
       if (source === ref.deref()) return 

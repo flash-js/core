@@ -13,7 +13,9 @@ export const on = (init) => {
         executeSignalContext(context, params)
       }
       // Register context as a source to the current execution context
-      registerSourceToCurrentSignalContext(context)
+      if (CURRENT_SIGNAL_CONTEXT != null) {
+        context.sourceFor(CURRENT_SIGNAL_CONTEXT)
+      }
       // Return signal value
       return context.state.value
     }
@@ -34,7 +36,7 @@ export const on = (init) => {
   }
 
   signal.off = () => {
-    unregisterSignalContext(context)
+    context.disconnect()
   }
 
   signal.peak = () => {
@@ -89,29 +91,4 @@ const executeSignalContextTargets = (context) => {
     }
     executeSignalContext(target, [target.state.value])
   }
-}
-
-const registerSourceToCurrentSignalContext = (context) => {
-  if (CURRENT_SIGNAL_CONTEXT != null) {
-    context.addTarget(CURRENT_SIGNAL_CONTEXT)
-    CURRENT_SIGNAL_CONTEXT.addSource(context)
-  }
-}
-
-function unregisterSignalContext(context) {
-  for (const sourceRef of context.sourceRefs) {
-    const source = sourceRef.deref()
-    if (source == null) {
-      continue
-    }
-    // Remove context from source targetRefs
-    for (let i = 0; i < source.targetRefs.length; ++i) {
-      const target = source.targetRefs[0].deref()
-      if (target === context) {
-        source.targetRefs.splice(i--, 1)
-      }
-    }
-  }
-  // Remove all targetRefs for context
-  context.targetRefs.splice(0, context.targetRefs.length)
 }
