@@ -93,6 +93,6 @@ const executeSignalContextTargets = (context) => {
 
   // Execute all targets:
   for (const target of targets) {
-    executeSignalContext(target, [target.state.value])
+    executeSignalContext(target)
   }
 }
