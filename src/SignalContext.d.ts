@@ -13,8 +13,14 @@ export declare class SignalContext<Init extends ComputeFn<T, Args> | T, T = Excl
   constructor(init: Init) 
 
   disconnect(): void 
+  disconnectSources(): void 
+  disconnectTargets(): void 
 
   sourceFor(target: SignalContext<any>): void 
+  targetFor(source: SignalContext<any>): void 
+
+  unsourceFor(target: SignalContext<any>): void
+  untargetFor(source: SignalContext<any>): void
 
   addSource(source: SignalContext<any>): void 
   removeSource(source: SignalContext<any>): void 

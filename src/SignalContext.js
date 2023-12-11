@@ -16,18 +16,45 @@ export class SignalContext {
     }
   }
 
+  disconnect() {
+    this.disconnectSources()
+    this.disconnectTargets()
+  }
+
+  disconnectSources() {
+    for (const sourceRef of this.sourceRefs) {
+      const source = sourceRef.deref()
+      if (source == null) continue
+      source.unsourceFor(this)
+    }
+  }
+
+  disconnectTargets() {
+    for (const targetRef of this.targetRefs) {
+      const target = targetRef.deref()
+      if (target == null) continue
+      target.untargetFor(this)
+    }
+  }
+
   sourceFor(target) {
     this.addTarget(target)
     target.addSource(this)
   }
 
-  disconnect() {
-    for (const sourceRef of this.sourceRefs) {
-      const source = sourceRef.deref()
-      if (source == null) continue
-      source.removeTarget(this)
-    }
-    this.targetRefs.splice(0, this.targetRefs.length)
+  targetFor(source) {
+    this.addSource(source)
+    source.addTarget(this)
+  }
+
+  unsourceFor(target) {
+    this.removeTarget(target)
+    target.removeSource(this)
+  }
+
+  untargetFor(source) {
+    this.removeSource(source)
+    target.removeSource(this)
   }
 
   addSource(source) {

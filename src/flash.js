@@ -64,11 +64,7 @@ export const self = (initialValue) => {
  */
 const executeSignalContext = (context, params = []) => {
   // Unsubscribe from existing upstream signals
-  context.sourceRefs.forEach(sourceRef => {
-    const source = sourceRef.deref()
-    context.removeSource(source)
-    source.removeTarget(context)
-  })
+  context.disconnectSources()
   // Cache signal current context
   const previousSignalContext = CURRENT_SIGNAL_CONTEXT
   // Set signal context
