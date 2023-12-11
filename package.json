@@ -16,9 +16,9 @@
   ],
   "scripts": {
     "clean": "rimraf build",
-    "build": "bun run clean && bun run build.lib && bun run build.types",
-    "build.lib": "rollup -c",
-    "build.types": "tsc"
+    "lib": "rollup -c",
+    "prepare": "bun run clean && bun run lib && bun run types",
+    "types": "tsc"
   },
   "devDependencies": {
     "@babel/core": "^7.23.2",
