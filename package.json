@@ -1,6 +1,6 @@
 {
   "name": "@flash.js/core",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Flash is a JavaScript signals library for state management.",
   "author": "Samuel Holmes",
   "type": "module",
@@ -30,5 +30,9 @@
     "rollup-plugin-filesize": "^10.0.0",
     "typescript": "^5.3.2"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/samholmes/@flash.js/core.git"
+  }
 }
