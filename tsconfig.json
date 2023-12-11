@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
-    "types": ["bun-types"],
+    "esModuleInterop": true,
     "lib": ["es2015"],
     "noEmit": true,
-    "strict": true
+    "strict": true,
+    "types": ["bun-types"]
   },
   "exclude": ["node_modules", "lib"],
 }
