@@ -2,28 +2,6 @@ import { describe, expect, test } from "bun:test";
 import { on, self } from "../src/flash";
 
 describe('Reactive signals', () => {
-  test("should recompute from new signal upstream", () => {
-    const lever = on(true)
-    const left = on('LEFT')
-    const right = on('RIGHT')
-    const signal = on(() => lever() ? left() : right())
-    
-    expect(signal()).toBe('LEFT')
-
-    left('left')
-    expect(signal()).toBe('left')
-    right('right')
-    expect(signal()).toBe('left')
-
-    lever(false)
-    expect(signal()).toBe('right')
-
-    left('LEFT')
-    expect(signal()).toBe('right')
-    right('RIGHT')
-    expect(signal()).toBe('RIGHT')
-  })
-
   test("should react to signal upstream", () => {
     const num = on(0)
     const square = on(() => num() ** 2)
@@ -45,11 +23,31 @@ describe('Reactive signals', () => {
     const source = on(0)
     const target = on(() => source.peak())
 
-    target()
-
     expect(target()).toBe(0)
 
     source(1)
     expect(target()).toBe(0)
+  })
+
+  test("should recompute from new signal upstream", () => {
+    const lever = on(true)
+    const left = on('LEFT')
+    const right = on('RIGHT')
+    const signal = on(() => lever() ? left() : right())
+    
+    expect(signal()).toBe('LEFT')
+
+    left('left')
+    expect(signal()).toBe('left')
+    right('right')
+    expect(signal()).toBe('left')
+
+    lever(false)
+    expect(signal()).toBe('right')
+
+    left('LEFT')
+    expect(signal()).toBe('right')
+    right('RIGHT')
+    expect(signal()).toBe('RIGHT')
   })
 })

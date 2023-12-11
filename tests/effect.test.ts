@@ -5,12 +5,9 @@ describe('Effects', () => {
   test("should respond to signal changes", () => {
     const log: number[] = []
     const count = on(0)
-    const effect = on(() => {
+    on(() => {
       log.push(count())
     })
-
-    // Activate the effect
-    effect()
 
     count(1)
     count(2)
@@ -26,12 +23,9 @@ describe('Effects', () => {
       const out = count() ** 2
       return out
     })
-    const effect = on(() => {
+    on(() => {
       log.push(square())
     })
-
-    // Activate the effect
-    effect()
 
     count(1)
     count(2)
@@ -43,23 +37,18 @@ describe('Effects', () => {
   test("multiple effects per source", () => {
     const externalState: number[] = []
     const source = on(0)
-    const effectA = on(function effectA() {
+    on(function effectA() {
       externalState[0] = source()
     })
-    const effectB = on(function effectB() {
+    on(function effectB() {
       externalState[1] = source()
     })
-    const effectC = on(function effectA() {
+    on(function effectA() {
       externalState[2] = source()
     })
-    const effectD = on(function effectB() {
+    on(function effectB() {
       externalState[3] = source()
     })
-
-    effectA()
-    effectB()
-    effectC()
-    effectD()
 
     expect(externalState).toEqual([0, 0, 0, 0])
     source(1)
@@ -74,7 +63,6 @@ describe('Effects', () => {
     const effect = on(() => {
       externalState = event()
     })
-    effect()
 
     expect(externalState).toBe(0)
     event(1)

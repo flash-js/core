@@ -43,6 +43,8 @@ export const on = (init) => {
     return context.state.value
   }
 
+  // Initialize signal
+  signal()
 
   return signal
 }
