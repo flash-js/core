@@ -15,7 +15,8 @@ describe('Static Signals', () => {
 
   test("should update it's value over many params", () => {
     const signal = on(1)
-    signal(2, 3)
+    signal(2)
+    signal(3)
     expect(signal()).toBe(3)
   })
 

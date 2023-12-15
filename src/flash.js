@@ -21,11 +21,9 @@ export const on = (init) => {
     }
     // Static signal
     if (context.compute == null) {
-      for (const param of params) {
-        context.state.value = param
-        // Invoke all target signals
-        executeSignalContextTargets(context)
-      }
+      context.state.value = params[0]
+      // Invoke all target signals
+      executeSignalContextTargets(context)
     }
     // Computed signal
     else {
