@@ -1,4 +1,4 @@
-import { WeakRef } from './ref.js'
+import { StrongRef, WeakRef } from './ref.js'
 
 export class SignalContext {
   compute = undefined
@@ -82,7 +82,7 @@ export class SignalContext {
       if (target === ref.deref()) return 
     }
 
-    const ref = new WeakRef(target)
+    const ref = new StrongRef(target)
     this.targetRefs.push(ref)
   }
 
