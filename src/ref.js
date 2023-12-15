@@ -1,13 +1,11 @@
+export class StrongRef{
+  [Symbol.toStringTag] = "StrongRef"
 
-export class StrongRef<T extends WeakKey>{
-  [Symbol.toStringTag]: "StrongRef" = "StrongRef"
-  key: T
-
-  constructor(key: T) {
+  constructor(key) {
     this.key = key
   }
 
-  deref(): T | undefined {
+  deref() {
     return this.key
   }
 
