@@ -37,6 +37,14 @@ export const on = (init) => {
     context.disconnect()
   }
 
+  signal.on = () => {
+    // On will register current context as a source
+    if (CURRENT_SIGNAL_CONTEXT != null) {
+      context.sourceFor(CURRENT_SIGNAL_CONTEXT)
+    }
+    return context.activated
+  }
+
   signal.peak = () => {
     return context.state.value
   }
@@ -91,8 +99,14 @@ const executeSignalContextTargets = (context) => {
     targets.push(target)
   }
 
+  // Activate the source context
+  context.activated = true
+
   // Execute all targets:
   for (const target of targets) {
     executeSignalContext(target)
   }
+
+  // De-activate the source context
+  context.activated = false
 }

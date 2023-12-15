@@ -50,4 +50,5 @@ describe('Reactive signals', () => {
     right('RIGHT')
     expect(signal()).toBe('RIGHT')
   })
+
 })

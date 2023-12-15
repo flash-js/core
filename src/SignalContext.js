@@ -1,6 +1,7 @@
 import { StrongRef, WeakRef } from './ref.js'
 
 export class SignalContext {
+  activated = false
   compute = undefined
   state = {}
 

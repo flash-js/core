@@ -4,6 +4,7 @@ export interface Signal<T, Args extends any[] = [T] >{
    (): T 
    (...args: [...Args]): T
    off(): void
+   on(): boolean
    peak(): T
 }
 

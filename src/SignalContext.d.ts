@@ -1,6 +1,7 @@
 import { ComputeFn } from "./flash"
 
 export declare class SignalContext<Init extends ComputeFn<T, Args> | T, T = Exclude<any, Function>, Args extends any[] = any[]> {
+  activated: boolean
   compute: Init extends Function ? ComputeFn<T, Args> : undefined
   state: {
     value?: T
