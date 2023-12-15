@@ -1,3 +1,5 @@
+import { WeakRef } from './ref.js'
+
 export class SignalContext {
   compute = undefined
   state = {}
