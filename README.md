@@ -7,8 +7,17 @@
 
 # Flash
 
+Flash is a JavaScript library for managing state using functional signals.
+
+- **Real Reactivity:** Flash introduces the simplest implementation of a signals. A signal is just a function which can react to other functions. This gives you a declarative-style to state management and leaving you with less control-flow overhead.
+- **Minimal API:** Flash accomplishes so much with so little. It exports a few functions, and encourages you to extend the API with your own custom "circuits".
+- **Pure JavaScript:** No need to compile or build. Flash is written in vanilla JS, and should work out of the box in modern run-times.
+
+## Index
+
 - [Installation](#install)
 - [Quick Start](#quick-start)
+- [Contributing](#contributing)
 
 ## <a name="install"></a>Installation
 
@@ -127,7 +136,7 @@ sum() // Returns 6
 
 The `self` function returns the signal's current value from within the compute function. It can be passed an optional default value for the first invocation of the signal's compute function.
 
-## Caching
+### Caching
 
 A computed signal will not cache a value in memory because it can be derived by it's compute function. We call these kinds of signals "dynamic" signals as apposed to "static" signals. 
 
@@ -153,3 +162,10 @@ computed()
 ```
 
 This means reducers have a memory foot-print because they leverage `self`. This makes since because we need to hold a value in memory to reduce over it on each iteration of the computed value over time.
+
+## <a name="contributing"></a>Contributing
+
+Contributing guide is coming soon.
+### License
+
+Flash is <a href="./LICENSE">MIT licensed</a>
