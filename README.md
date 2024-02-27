@@ -117,7 +117,7 @@ The `off` method is not limited to effects; it can be used to disable any signal
 A computed signal can reduce over other signals by referencing itself, or it's current value using `self`:
 
 ```js
-import { on, self } from 'signal'
+import { on, self } from '@flash.js/core'
 
 // Define a source signal:
 const num = on(0)
