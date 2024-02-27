@@ -114,16 +114,16 @@ The `off` method is not limited to effects; it can be used to disable any signal
 
 ### Reducers
 
-A computed signal can reduce over other signals by referencing itself, or it's current value using `self`:
+A computed signal can reduce over other signals by referencing itself, or it's current value using `own`:
 
 ```js
-import { on, self } from '@flash.js/core'
+import { on, own } from '@flash.js/core'
 
 // Define a source signal:
 const num = on(0)
 
 // Create our reducer:
-const sum = on((accumulator = self(0)) => accumulator + num())
+const sum = on((accumulator = own(0)) => accumulator + num())
 
 // Update num:
 num(1)
@@ -134,7 +134,7 @@ num(3)
 sum() // Returns 6
 ```
 
-The `self` function returns the signal's current value from within the compute function. It can be passed an optional default value for the first invocation of the signal's compute function.
+The `own` function returns the signal's current value from within the compute function. It can be passed an optional default value for the first invocation of the signal's compute function.
 
 ### Caching
 
@@ -152,16 +152,16 @@ const computed = on(() => 123)
 computed() 
 ```
 
-However, a computed signal can by a static signal and cache its value when it implements `self`:
+However, a computed signal can by a static signal and cache its value when it implements `own`:
 
 ```js
-const computed = on((value = self(23)) => value)
+const computed = on((value = own(23)) => value)
 
 // Returns the cache return value, 23:
 computed()
 ```
 
-This means reducers have a memory foot-print because they leverage `self`. This makes since because we need to hold a value in memory to reduce over it on each iteration of the computed value over time.
+This means reducers have a memory foot-print because they leverage `own`. This makes since because we need to hold a value in memory to reduce over it on each iteration of the computed value over time.
 
 ## <a name="contributing"></a>Contributing
 

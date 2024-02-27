@@ -55,7 +55,7 @@ export const on = (init) => {
   return signal
 }
 
-export const self = (initialValue) => {
+export const own = (initialValue) => {
   return CURRENT_SIGNAL_CONTEXT.state.value ?? initialValue
 }
 

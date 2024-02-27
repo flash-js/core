@@ -1,10 +1,10 @@
 import { describe, expect, test } from "bun:test";
-import { on, self } from "../src/flash";
+import { on, own } from "../src/flash";
 
 describe('Reducers Signals', () => {
   test("should react to signal upstream with previous value", () => {
     const num = on(0)
-    const sum = on((prev = self(0)) => prev + num())
+    const sum = on((prev = own(0)) => prev + num())
     expect(sum()).toBe(0)
     num(1)
     expect(sum()).toBe(1)
@@ -17,7 +17,7 @@ describe('Reducers Signals', () => {
   test("reduces over many", () => {
     const a = on(0)
     const b = on(0)
-    const reduced = on((state: 'a' | 'b' | undefined = self()) => {
+    const reduced = on((state: 'a' | 'b' | undefined = own()) => {
       if (a.on()) {
         state = 'a' as const
       }

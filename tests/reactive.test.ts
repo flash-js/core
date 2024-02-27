@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { on, self } from "../src/flash";
+import { on } from "../src/flash";
 
 describe('Reactive signals', () => {
   test("should react to signal upstream", () => {
@@ -50,5 +50,4 @@ describe('Reactive signals', () => {
     right('RIGHT')
     expect(signal()).toBe('RIGHT')
   })
-
 })
